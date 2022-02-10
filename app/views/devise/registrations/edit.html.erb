@@ -1,0 +1,205 @@
+<style>
+body {
+    background: rgb(231, 231, 231, 1)
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #BA68C8
+}
+
+.profile-button {
+    background: rgb(99, 39, 120);
+    box-shadow: none;
+    border: none
+}
+
+.profile-button:hover {
+    background: #682773
+}
+
+.profile-button:focus {
+    background: #682773;
+    box-shadow: none
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer
+}
+
+.labels {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.add-experience:hover {
+    background: #BA68C8;
+    color: #fff;
+    cursor: pointer;
+    border: solid 1px #BA68C8
+}
+.drop-shadow{
+    box-shadow: 0px 0px 21px 2px rgba(0,0,0,0.43);
+    -webkit-box-shadow: 0px 0px 21px 2px rgba(0,0,0,0.43);
+    -moz-box-shadow: 0px 0px 21px 2px rgba(0,0,0,0.43);
+}
+.invalid-feedback{
+    display:block
+}
+</style>
+<%= render "layouts/shared/navbar" %>
+<div class="container rounded bg-white mt-5 mb-5 drop-shadow">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <%= image_tag resource.avatar if resource.avatar.attached? %>
+                <span class="font-weight-bold">
+                <%= resource.name %>
+                </span>
+                <span class="text-black-50">
+                    <%= resource.email %>
+                </span>
+                <span> </span>
+            </div>
+        </div>
+            <div class="col-md-7 border-right">
+                <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Profile Settings</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+                                    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+                                <% end %>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <label class="labels">Name</label>
+                                <input type="text" 
+                                        name="user[name]" 
+                                        placeholder="Name"
+                                        value="<%= resource.name %>"
+                                        id="user_name"
+                                        class="form-control <%= (!resource.errors[:name].blank?) ? 'is-invalid' : nil %>"
+                                        >
+                                <% if !resource.errors[:name].blank? %>
+                                    <div class="invalid-feedback">
+                                        <%= resource.errors.full_messages_for(:name).split(",").join(" ") %>
+                                    </div>
+                                <% end %>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <label class="labels">Email ID</label>
+                                <input type="email" 
+                                        id="user_email" 
+                                        autocomplete="off"
+                                        name="user[email]"
+                                        value="<%= resource.email %>"
+                                        class="form-control <%= (!resource.errors[:email].blank?) ? 'is-invalid' : nil %>" 
+                                        placeholder="Email" />
+                                <% if !resource.errors[:email].blank? %>
+                                    <div class="invalid-feedback">
+                                        <%= resource.errors.full_messages_for(:email).split(",").join(" ") %>
+                                    </div>
+                                <% end %>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label class="labels">Phone Number</label>
+                                <input type="text" 
+                                        maxlenght="10"
+                                        value="<%= resource.phone_number %>"
+                                        id="user_phone_number" 
+                                        autocomplete="off"
+                                        name="user[phone_number]"
+                                        class="form-control <%= (!resource.errors[:phone_number].blank?) ? 'is-invalid' : nil %>" 
+                                        placeholder="Phone" />
+                                <% if !resource.errors[:phone_number].blank? %>
+                                    <div class="invalid-feedback">
+                                        <%= resource.errors.full_messages_for(:phone_number).split(",").join(" ") %>
+                                    </div>
+                                <% end %>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <label class="labels">Avatar</label>
+                                <div class="custom-file">
+                                    <%=
+                                        f.file_field :avatar
+                                    %>
+                                </div>
+                                <% if !resource.errors[:avatar].blank? %>
+                                    <div class="invalid-feedback">
+                                        <%= resource.errors.full_messages_for(:avatar).split(",").join(" ") %>
+                                    </div>
+                                <% end %>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label class="labels">
+                                    Current Password <br>
+                                </label>
+                                <p style="font-size:12px">
+                                     we need your current password to confirm your changes 
+                                </p>
+                                <input type="password" 
+                                        name="user[current_password]"
+                                        autocomplete="off"
+                                        id="form3Example4c" 
+                                        class="form-control <%= (!resource.errors[:current_password].blank?) ? 'is-invalid' : nil %>" 
+                                        required
+                                        placeholder="Password"/>
+
+                                <% if !resource.errors[:current_password].blank? %>
+                                    <div class="invalid-feedback">
+                                        <%= resource.errors.full_messages_for(:current_password).split(",").join(" ") %>
+                                    </div>
+                                <% end %>
+                                <br>
+                                <% if @minimum_password_length %>
+                                    <em>(<%= @minimum_password_length %> characters minimum)</em>
+                                <% end %>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="labels">Confirm Password</label>
+                                <input type="password" 
+                                        name="user[password_confirmation]"
+                                        autocomplete="off"
+                                        id="form3Example4c" 
+                                        class="form-control <%= (!resource.errors[:password_confirmation].blank?) ? 'is-invalid' : nil %>" 
+                                        placeholder="Password"/>
+                                <% if !resource.errors[:password_confirmation].blank? %>
+                                    <div class="invalid-feedback">
+                                        <%= resource.errors.full_messages_for(:password_confirmation).split(",").join(" ") %>
+                                    </div>
+                                <% end %>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 text-center">
+                            <%= 
+                                f.submit "Update", 
+                                data: { turbo:false },
+                                class: "btn btn-primary profile-button" 
+                            %>
+                        </div>
+                    </div>
+                <%end%>
+            </div>
+    </div>
+</div>
